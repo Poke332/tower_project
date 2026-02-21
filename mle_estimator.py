@@ -38,4 +38,4 @@ if __name__ == "__main__":
     print(f"sigma_MLE: {math.sqrt(sigma2_hat)}")
     print(f"sigma2_MLE: {sigma2_hat}")
     
-    print(f"Estimation Error: {abs(param["mu"]-mu_hat)}")
+    print(f"Estimation Error: {abs(mu_hat-param["mu"])}")
