@@ -44,7 +44,7 @@ class Explorer:
     
     
 
-def generate_tower(p: float, mu: float, sigma: float, n: int):
+def generate_tower(p: float, mu: float, sigma: float, n: int, **kwargs):
     """Generates a tower in a form of numpy array filled with damage numbers
 
     Args:

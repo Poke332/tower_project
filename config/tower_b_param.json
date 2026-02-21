@@ -1,5 +1,7 @@
 {
     "p": 1,
     "mu": 25,
-    "sigma": 20
+    "sigma": 20,
+    "num_floors": 100,
+    "num_attempts": 1000
 }

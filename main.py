@@ -5,8 +5,6 @@ from tower import generate_tower, Explorer
 from collections import deque
 
 explorer = Explorer()
-num_floors = 100
-num_attempts = 1000
 
 def method_a(floors):
     for damage in floors:
@@ -35,11 +33,11 @@ if __name__ == "__main__":
     with open("config\\tower_b_paran.json", "r") as file:
         params = json.load(file)
     
-    floors = generate_tower(**params, n=num_floors)
+    floors = generate_tower(**params)
     method_a_res = np.array()
     method_b_res = np.array()
     
-    for _ in range(num_attempts):
+    for _ in range(params["num_attempts"]):
         method_a_res = np.append(method_a_res, method_a(floors))
         method_b_res = np.append(method_b_res, method_b(floors))
         
