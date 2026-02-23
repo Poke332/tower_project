@@ -2,6 +2,6 @@
     "p": 1,
     "mu": 25,
     "sigma": 20,
-    "num_floors": 100,
+    "n": 100,
     "num_attempts": 1000
 }
