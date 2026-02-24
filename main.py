@@ -93,6 +93,7 @@ if __name__ == "__main__":
     
     t_stat, p_val = stats.ttest_ind(method_a_res, method_b_res)
 
+    print("="*20)
     print(f"T-statistic: {t_stat:.4f}")
     print(f"P-value: {p_val:.4f}")
 
