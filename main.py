@@ -44,7 +44,7 @@ def method_b(floors, explorer):
             # Check if this floor is far enough from last block (cooldown = 3 floors)
             floors_since_last_block = candidate_floor - last_block_floor
             if floors_since_last_block >= 3:
-                if preview_damage > highest_damage and (planned_block_floor is None or sum(floors[current_floor:candidate_floor+1]) < explorer.health * 0.9):
+                if preview_damage > highest_damage and (planned_block_floor is None or sum(floors[current_floor:candidate_floor]) < explorer.health * 0.9):
                     highest_damage = preview_damage
                     best_floor = candidate_floor
         
