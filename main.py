@@ -18,41 +18,54 @@ def method_a(floors, explorer):
     return explorer.curr_floor
         
 def method_b(floors, explorer):
-    damage_preview = deque(floors[:5])
-    planned_block_index = None
+    """
+    Strategy: Preview next 5 floors and block the highest damage floor
+    that's far enough from the last block (respecting 3-floor cooldown)
+    """
+    # Initialize preview window with first 5 floors
+    preview_window = deque(floors[:5])
+    
+    # Track block planning
+    planned_block_floor = None
     last_block_floor = -3
     
-    for i, damage in enumerate(floors):
+    for current_floor, damage in enumerate(floors):
         if explorer.health == 0:
             return explorer.curr_floor
         
-        if planned_block_index is None:
-            
-            best_index = None
-            best_damage = -1
-            
-            for j, preview in enumerate(damage_preview):
-                real_floor = i + j
-                
-                if real_floor - last_block_floor >= 3:
-                    if preview > best_damage:
-                        best_damage = preview
-                        best_index = real_floor
-            
-            planned_block_index = best_index
+        # STEP 1: Plan which future floor to block (if no current plan)
+        best_floor = None
+        highest_damage = -1
         
-        if planned_block_index == i and explorer.is_block_avail():
+        # Look at each floor in the preview window
+        for preview_index, preview_damage in enumerate(preview_window):
+            candidate_floor = current_floor + preview_index
+            
+            # Check if this floor is far enough from last block (cooldown = 3 floors)
+            floors_since_last_block = candidate_floor - last_block_floor
+            if floors_since_last_block >= 3:
+                if preview_damage > highest_damage and (planned_block_floor is None or sum(floors[current_floor:candidate_floor+1]) < explorer.health * 0.9):
+                    highest_damage = preview_damage
+                    best_floor = candidate_floor
+        
+        # Save the best candidate as our planned block
+        planned_block_floor = best_floor
+        
+        # STEP 2: Execute block if current floor is the planned one
+        if planned_block_floor == current_floor and explorer.is_block_avail():
             explorer.skill_block()
-            last_block_floor = i
-            planned_block_index = None
+            last_block_floor = current_floor
+            planned_block_floor = None  # Clear plan after using block
         
+        # STEP 3: Take damage from current floor and move up
         explorer.take_damage(damage)
         explorer.progress_floor()
         
-        # Slides damage preview window
-        damage_preview.popleft()
-        if (i + 5) < len(floors):
-            damage_preview.append(floors[i + 5])
+        # STEP 4: Slide the preview window forward
+        preview_window.popleft()  # Remove current floor from preview
+        next_floor_index = current_floor + 5
+        if next_floor_index < len(floors):
+            preview_window.append(floors[next_floor_index])  # Add next unseen floor
 
     return explorer.curr_floor
         
